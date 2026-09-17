@@ -1,6 +1,8 @@
 name: Build and Push Unsense Theme
 
 on:
+  push:
+    branches: [master]
   release:
     types: [published]
   workflow_dispatch:
@@ -33,7 +35,7 @@ jobs:
       - name: Package and index in FreeBSD
         uses: vmactions/freebsd-vm@v1
         with:
-          release: "14.2"
+          release: "15"
           usesh: true
           copyback: true
           prepare: |
@@ -49,7 +51,7 @@ jobs:
       - name: Copy package and index to docs
         run: |
           sudo apt-get install -y pandoc
-          DEST_DIR=docs/unsense-repo/FreeBSD:14:amd64
+          DEST_DIR=docs/unsense-repo/FreeBSD:15:amd64
           REPO_DIR=${GITHUB_WORKSPACE}/misc/unsense-theme/work/pkg
           mkdir -p ${DEST_DIR}
           mkdir -p ${REPO_DIR}
@@ -66,4 +68,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/
-          cname: pkg.froggle.org
