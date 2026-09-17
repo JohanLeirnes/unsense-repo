@@ -47,7 +47,10 @@ jobs:
             set -ex
             THEME_DIR=${GITHUB_WORKSPACE}/misc/unsense-theme
             REPO_DIR=${THEME_DIR}/work/pkg
-            make package
+            # We build on plain FreeBSD (no opnsense-version), so Mk/defaults.mk
+            # cannot derive the product ABI. Without this the package is stamped
+            # with the fallback ABI and OPNsense shows it as "(misconfigured)".
+            make PLUGIN_ABI=26.7 package
             ${GITHUB_WORKSPACE}/Scripts/pkg-repo.sh ${REPO_DIR}
             echo '=== repo contents ===' && find ${REPO_DIR} -type f
 
